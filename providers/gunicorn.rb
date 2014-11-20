@@ -33,6 +33,11 @@ action :before_compile do
     virtualenv django_resource ? django_resource.virtualenv : new_resource.virtualenv
   end
 
+  flask_resource = new_resource.application.sub_resources.select{|res| res.type == :flask}.first
+  gunicorn_install "gunicorn-#{new_resource.application.name}" do
+    virtualenv flask_resource ? flask_resource.virtualenv : new_resource.virtualenv
+  end
+
   if !new_resource.restart_command
     r = new_resource
     new_resource.restart_command do
@@ -85,6 +90,10 @@ action :before_deploy do
       django_resource = new_resource.application.sub_resources.select{|res| res.type == :django}.first
       raise "No Django deployment resource found" unless django_resource
       base_command = "#{::File.join(django_resource.virtualenv, "bin", "python")} manage.py run_gunicorn"
+    else if new_resource.app_module == :flask
+      django_resource = new_resource.application.sub_resources.select{|res| res.type == :django}.first
+      raise "No Flask deployment resource found" unless flask_resource
+      base_command = "#{::File.join(flask_resource.virtualenv, "bin", "python")} manage.py run_gunicorn"
     else
       gunicorn_command = new_resource.virtualenv.nil? ? "gunicorn" : "#{::File.join(new_resource.virtualenv, "bin", "gunicorn")}"
       base_command = "#{gunicorn_command} #{new_resource.app_module}"

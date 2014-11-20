@@ -1,7 +1,7 @@
 #
 # Author:: Noah Kantrowitz <noah@opscode.com>
 # Cookbook Name:: application_python
-# Provider:: django
+# Provider:: flask
 #
 # Copyright:: 2011, Opscode, Inc <legal@opscode.com>
 #
