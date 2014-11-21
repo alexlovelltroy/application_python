@@ -108,7 +108,7 @@ def created_settings_file
     group new_resource.group
     mode "644"
     variables new_resource.settings.clone
-    variables.update :flask => new_resource, :debug => new_resource.debug, :testing =>  new_resource.testing, :csrf_enabled => new_resource.csrf_enabled, :secret_key => news_resource.secret_key 
+    variables.update :flask => new_resource, :debug => new_resource.debug
   end
 end
 end
