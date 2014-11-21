@@ -23,6 +23,11 @@ require 'tmpdir'
 include Chef::DSL::IncludeRecipe
 
 action :before_compile do
+  include_recipe 'python'
+
+  new_resource.symlink_before_migrate.update({
+    new_resource.local_settings_base => new_resource.local_settings_file,
+  })
 end
 
 action :before_deploy do
